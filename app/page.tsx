@@ -4,7 +4,7 @@ import { PopularCityList } from "./_components/PopularCityList";
 
 export default function Home() {
   return (
-    <div className="scale-90">
+    <div className="scale-90 ">
       <Hero />
       <PopularCityList />
     </div>
