@@ -115,7 +115,7 @@ const ChatBox = () => {
 
   const getPlaceholderText = () => {
     if (questionCount === 0) {
-      return "Create a trip to Paris from New York...";
+      return "Create a trip to Ranchi...";
     } else if (questionCount < 7) {
       return "Type your response...";
     } else {

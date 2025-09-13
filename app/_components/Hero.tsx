@@ -74,7 +74,7 @@ const Hero = () => {
         <div className="pt-4">
           <div className="border rounded-2xl relative shadow-md dark:border-gray-700">
             <Textarea
-              placeholder="Create a trip to Paris from New York..."
+              placeholder="Create a trip to Ranchi..."
               className="w-full border-none bg-transparent h-28 focus-visible:ring-1 shadow-none resize-none p-4"
             />
             <Button
@@ -112,7 +112,7 @@ const Hero = () => {
           <HeroVideoDialog
             className="block"
             animationStyle="from-center"
-            videoSrc="https://www.example.com/dummy-video"
+            videoSrc="/video.mp4"
             thumbnailSrc="https://mma.prnewswire.com/media/2401528/1_MindtripProduct.jpg?p=facebook"
             thumbnailAlt="Dummy Video Thumbnail"
           />

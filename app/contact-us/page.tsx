@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Send } from "lucide-react";
+import emailjs from "emailjs-com";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -13,14 +14,35 @@ export default function ContactForm() {
 
   const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: hook backend API / email service
-    setSubmitted(true);
+
+    emailjs
+      .send(
+        "your_service_id", // 🔹 replace with your EmailJS service ID
+        "your_template_id", // 🔹 replace with your EmailJS template ID
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+        },
+        "your_public_key" // 🔹 replace with your EmailJS public key
+      )
+      .then(
+        () => {
+          setSubmitted(true);
+        },
+        (error) => {
+          console.error("FAILED...", error);
+          alert("Something went wrong. Please try again.");
+        }
+      );
   };
 
   return (
@@ -47,7 +69,7 @@ export default function ContactForm() {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/20 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 outline-none transition"
-                placeholder="John Doe"
+                placeholder="Enter Your Name..."
               />
             </div>
 
@@ -61,7 +83,7 @@ export default function ContactForm() {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 rounded-lg bg-black/40 border border-white/20 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 outline-none transition"
-                placeholder="example@email.com"
+                placeholder="Enter Your Email..."
               />
             </div>
 

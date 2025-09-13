@@ -25,8 +25,16 @@ function Header() {
     router.push("/create-new-trip");
     setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 2500);
   };
+
+  function newPage(path: string): void {
+    setIsLoading(true);
+    router.push(path);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+  }
 
   if (isLoading) {
     return (
@@ -48,11 +56,11 @@ function Header() {
       {/* Menu Options */}
       <div className="md:flex hidden items-center gap-8">
         {menuOptions.map((option, index) => (
-          <Link key={index} href={option.path}>
+          <button key={index} onClick={() => newPage(option.path)}>
             <h2 className="cursor-pointer text-lg hover:scale-105 hover:text-primary transition-all">
               {option.name}
             </h2>
-          </Link>
+          </button>
         ))}
       </div>
 
