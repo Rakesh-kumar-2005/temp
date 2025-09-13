@@ -48,60 +48,54 @@ const ChatBox = () => {
   };
 
   const onSend = async () => {
-    if (!userInput?.trim()) {
-      return;
-    }
+    if (!userInput?.trim()) return;
 
     setIsLoading(true);
     setError(null);
     const inputValue = userInput.trim();
     setUserInput("");
 
-    const newMsg: Message = {
-      role: "user",
-      content: inputValue,
-    };
-
+    const newMsg: Message = { role: "user", content: inputValue };
     const updatedMessages = [...messages, newMsg];
     setMessages(updatedMessages);
 
     try {
-      // Determine if this should be a final request
-      const isFinal = questionCount >= 6 || 
-                     inputValue.toLowerCase().includes('generate plan') || 
-                     inputValue.toLowerCase().includes('create itinerary') ||
-                     inputValue.toLowerCase().includes('final plan') ||
-                     inputValue.toLowerCase().includes('complete plan');
-      
-      const result = await axios.post<ApiResponse>('/api/aimodel', {
+      const isFinal =
+        questionCount >= 6 ||
+        inputValue.toLowerCase().includes("generate plan") ||
+        inputValue.toLowerCase().includes("create itinerary") ||
+        inputValue.toLowerCase().includes("final plan") ||
+        inputValue.toLowerCase().includes("complete plan");
+
+      const result = await axios.post<ApiResponse>("/api/aimodel", {
         messages: updatedMessages,
         isFinal: isFinal,
-        useAI: aiProvider
+        useAI: aiProvider,
       });
 
-      console.log('API Response:', result.data);
+      console.log("API Response:", result.data);
 
       if (result.data?.resp) {
-        setMessages((prev: Message[]) => [...prev, {
-          role: 'assistant',
-          content: result.data.resp
-        }]);
+        setMessages((prev: Message[]) => [
+          ...prev,
+          { role: "assistant", content: result.data.resp },
+        ]);
 
-        // Increment question count for regular responses
-        if (!isFinal && result.data.ui !== 'Final') {
-          setQuestionCount(prev => prev + 1);
+        if (!isFinal && result.data.ui !== "Final") {
+          setQuestionCount((prev) => prev + 1);
         }
 
-        // Handle different UI states
-        if (result.data.ui === 'Final' && result.data.trip_plan) {
+        if (result.data.ui === "Final" && result.data.trip_plan) {
           setTripPlan(result.data.trip_plan);
-          console.log('Trip plan received:', result.data.trip_plan);
+          console.log("Trip plan received:", result.data.trip_plan);
         }
       }
     } catch (error: any) {
-      console.error('Error sending message:', error);
-      setError(error.response?.data?.message || 'Failed to send message. Please try again.');
-      // Remove the user message if the request failed
+      console.error("Error sending message:", error);
+      setError(
+        error.response?.data?.message ||
+          "Failed to send message. Please try again."
+      );
       setMessages((prev: Message[]) => prev.slice(0, -1));
     } finally {
       setIsLoading(false);
@@ -109,7 +103,7 @@ const ChatBox = () => {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       onSend();
     }
@@ -141,32 +135,32 @@ const ChatBox = () => {
 
   return (
     <div className="flex flex-col h-[80vh] max-w-4xl mx-auto">
-      {/* Header with AI Provider Selector and Reset */}
+      {/* Header */}
       <div className="flex justify-between items-center mb-4 p-2 bg-white/5 rounded-lg">
         <div className="flex space-x-2">
           <Button
-            variant={aiProvider === 'openai' ? 'default' : 'outline'}
+            variant={aiProvider === "openai" ? "default" : "outline"}
             size="sm"
-            onClick={() => switchAIProvider('openai')}
+            onClick={() => switchAIProvider("openai")}
             className="flex items-center gap-2"
           >
             <Bot size={16} />
             OpenAI
           </Button>
           <Button
-            variant={aiProvider === 'gemini' ? 'default' : 'outline'}
+            variant={aiProvider === "gemini" ? "default" : "outline"}
             size="sm"
-            onClick={() => switchAIProvider('gemini')}
+            onClick={() => switchAIProvider("gemini")}
             className="flex items-center gap-2"
           >
             <Brain size={16} />
             Gemini
-            {aiProvider === 'gemini' && (
+            {aiProvider === "gemini" && (
               <span className="text-xs bg-blue-500 px-1 rounded">+Search</span>
             )}
           </Button>
         </div>
-        
+
         <Button
           variant="outline"
           size="sm"
@@ -178,19 +172,25 @@ const ChatBox = () => {
         </Button>
       </div>
 
-      {/* Display messages */}
+      {/* Messages */}
       <section className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && (
           <div className="text-center text-gray-300 mt-8">
             <div className="text-6xl mb-4">✈️</div>
-            <div className="text-xl font-medium mb-2">Welcome to AI Trip Planner!</div>
+            <div className="text-xl font-medium mb-2">
+              Welcome to AI Trip Planner!
+            </div>
             <div className="text-sm opacity-80 max-w-md mx-auto">
-              I'll help you plan the perfect trip by asking you a few questions about your preferences.
-              You can chat with me unlimited times to create multiple trip plans!
+              I'll help you plan the perfect trip by asking you a few questions
+              about your preferences. You can chat with me unlimited times to
+              create multiple trip plans!
             </div>
             <div className="mt-4 flex items-center justify-center gap-2 text-xs opacity-60">
               <MapPin size={12} />
-              <span>Unlimited conversations • Real-time weather • Live search results</span>
+              <span>
+                Unlimited conversations • Real-time weather • Live search
+                results
+              </span>
             </div>
           </div>
         )}
@@ -199,13 +199,17 @@ const ChatBox = () => {
           msg.role === "user" ? (
             <div className="flex justify-end" key={index}>
               <div className="max-w-lg bg-primary text-white px-4 py-3 rounded-lg shadow-sm">
-                <div className="whitespace-pre-wrap text-sm">{msg.content}</div>
+                <div className="whitespace-pre-wrap text-sm">
+                  {msg.content}
+                </div>
               </div>
             </div>
           ) : (
             <div className="flex justify-start" key={index}>
               <div className="max-w-lg bg-white/10 text-white px-4 py-3 rounded-lg shadow-sm border border-white/20">
-                <div className="whitespace-pre-wrap text-sm">{msg.content}</div>
+                <div className="whitespace-pre-wrap text-sm">
+                  {msg.content}
+                </div>
               </div>
             </div>
           )
@@ -217,9 +221,9 @@ const ChatBox = () => {
               <div className="flex items-center gap-3">
                 <PulseLoader color="white" size={6} />
                 <span className="text-sm">
-                  {aiProvider === 'gemini' 
-                    ? 'Gemini is thinking and searching...' 
-                    : 'OpenAI is processing your request...'}
+                  {aiProvider === "gemini"
+                    ? "Gemini is thinking..."
+                    : "OpenAI is thinking..."}
                 </span>
               </div>
             </div>
@@ -230,8 +234,8 @@ const ChatBox = () => {
           <div className="flex justify-center">
             <div className="px-4 py-2 bg-red-500/20 text-red-200 rounded-lg text-sm shadow-sm border border-red-500/30">
               {error}
-              <button 
-                onClick={() => setError(null)} 
+              <button
+                onClick={() => setError(null)}
                 className="ml-2 text-red-300 hover:text-red-100"
               >
                 ✕
@@ -247,8 +251,8 @@ const ChatBox = () => {
               <span className="font-medium">Trip Plan Generated!</span>
             </div>
             <div className="text-sm text-green-100">
-              Your personalized trip plan is ready with real-time weather data and live search results.
-              Scroll up to see all the details!
+              Your personalized trip plan is ready with real-time weather data
+              and live search results. Scroll up to see all the details!
             </div>
           </div>
         )}
@@ -256,27 +260,7 @@ const ChatBox = () => {
         <div ref={messagesEndRef} />
       </section>
 
-      {/* Progress indicator */}
-      {questionCount > 0 && questionCount < 7 && (
-        <div className="px-4 py-2 bg-white/5 rounded-lg mx-4 mb-2">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-xs text-gray-300">
-              Progress: {questionCount}/7 questions answered
-            </span>
-            <span className="text-xs text-gray-400">
-              {Math.round((questionCount / 7) * 100)}%
-            </span>
-          </div>
-          <div className="w-full bg-gray-700 rounded-full h-1.5">
-            <div 
-              className="bg-primary h-1.5 rounded-full transition-all duration-300"
-              style={{ width: `${(questionCount / 7) * 100}%` }}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* User input */}
+      {/* Input */}
       <section className="p-4">
         <div className="border border-white/20 rounded-2xl relative bg-white/5 backdrop-blur-sm">
           <Textarea
@@ -288,7 +272,7 @@ const ChatBox = () => {
             disabled={isLoading}
           />
           <div className="absolute bottom-2 right-2 flex items-center gap-2">
-            {aiProvider === 'gemini' && (
+            {aiProvider === "gemini" && (
               <div className="text-xs text-gray-400 flex items-center gap-1">
                 <Zap size={12} />
                 Enhanced
@@ -304,7 +288,7 @@ const ChatBox = () => {
             </Button>
           </div>
         </div>
-        
+
         {/* Tips */}
         <div className="mt-2 text-xs text-gray-400 text-center flex items-center justify-center gap-2">
           <span>{getTipText()}</span>

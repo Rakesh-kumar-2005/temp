@@ -1,92 +1,149 @@
 "use client";
 
-import React from "react";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
 
 export function PopularCityList() {
-  const cards = data.map((card, index) => (
-    <Card key={card.src} card={card} index={index} />
+  const cards = popularCities.map((card, index) => (
+    <Card card={card} index={index} slug={card.slug} key={card.slug} />
   ));
 
   return (
     <div className="w-full h-full py-20">
       <h2 className="max-w-7xl pl-4 mx-auto text-xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-200 font-sans">
-       Destinations Beyond <strong className="text-primary">Imagination</strong>
+        Destinations Beyond{" "}
+        <strong className="text-primary">Imagination</strong>
       </h2>
       <Carousel items={cards} />
     </div>
   );
 }
+export const popularCities = [
+  {
+    title: "Bhatinda Waterfalls",
+    category: "Natural Wonder",
+    description: `Bhatinda Waterfalls is a scenic natural fall tucked away in the forests of Dhanbad district, Jharkhand. It holds cultural significance for locals and is a popular trekking and picnic destination.
 
-const DummyContent = () => {
-  return (
-    <>
-      {[...new Array(3).fill(1)].map((_, index) => {
-        return (
-          <div
-            key={"dummy-content" + index}
-            className="bg-[#F5F5F7] dark:bg-neutral-800 p-8 md:p-14 rounded-3xl mb-4"
-          >
-            <p className="text-neutral-600 dark:text-neutral-400 text-base md:text-2xl font-sans max-w-3xl mx-auto">
-              <span className="font-bold text-neutral-700 dark:text-neutral-200">
-                The first rule of Apple club is that you boast about Apple club.
-              </span>{" "}
-              Keep a journal, quickly jot down a grocery list, and take amazing
-              class notes. Want to convert those notes to text? No problem.
-              Langotiya jeetu ka mara hua yaar is ready to capture every
-              thought.
-            </p>
-            <img
-              src="https://assets.aceternity.com/macbook.png"
-              alt="Macbook mockup from Aceternity UI"
-              height="500"
-              width="500"
-              className="md:w-1/2 md:h-1/2 h-full w-full mx-auto object-contain"
-            />
-          </div>
-        );
-      })}
-    </>
-  );
-};
+Highlights:
+- Surrounded by dense forests and rocky terrain.
+- Ideal for nature lovers and photographers.
+- Less commercialized, offering raw natural beauty.
 
-const data = [
+Location: Bhawardaha village, Dhanbad district, Jharkhand
 
-  {
-    "category": "Paris, France",
-    "title": "Explore the City of Lights – Eiffel Tower, Louvre & more",
-    "src": "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cGFyaXN8ZW58MHx8MHx8fDA%3D",
-    "content": <DummyContent />
-  },
-  {
-    "category": "New York, USA",
-    "title": "Experience NYC – Times Square, Central Park, Broadway",
-    "src": "https://plus.unsplash.com/premium_photo-1661954654458-c673671d4a08?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "content": <DummyContent />
-  },
-  {
-    "category": "Tokyo, Japan",
-    "title": "Discover Tokyo – Shibuya, Cherry Blossoms, Temples",
-    "src": "https://images.unsplash.com/photo-1522547902298-51566e4fb383?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "content": <DummyContent />
-  },
-  {
-    "category": "Rome, Italy",
-    "title": "Walk through History – Colosseum, Vatican, Roman Forum",
-    "src": "https://plus.unsplash.com/premium_photo-1675975678457-d70708bf77c8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "content": <DummyContent />
-  },
-  {
-    "category": "Dubai, UAE",
-    "title": "Luxury and Innovation – Burj Khalifa, Desert Safari",
-    "src": "https://images.unsplash.com/photo-1526495124232-a04e1849168c?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "content": <DummyContent />
-  },
-  {
-    "category": "India",
-    "title": "Harbour Views – Opera House, Bondi Beach & Wildlife",
-    "src": "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "content": <DummyContent />
-  }
+Entry Fee: Free
 
+Opening Hours: 6:00 AM - 6:00 PM
+
+History: A natural site without man-made structures, known to locals for generations.`,
+
+    src: "https://images.unsplash.com/photo-1596103399853-6b41f3fad275?q=80&w=735&auto=format&fit=crop",
+bestTimeToVisit: 'October to March (post-monsoon and winter season)'
+
+  },
+  {
+    title: "Hazaribagh",
+    category: "Heritage Destination",
+    bestTimeToVisit: 'November to February (cool and pleasant weather)',
+    description: `Hazaribagh is an ancient region that once served as a British cantonment town. It is famous for its wildlife sanctuary, lakes, and colonial-era heritage.
+
+Highlights:
+- Hazaribagh Wildlife Sanctuary (home to tigers, leopards, and deer).
+- Historical significance during the freedom movement.
+- Picturesque lakes like Canary Hill Lake.
+
+Location: Hazaribagh district, Jharkhand
+
+Entry Fee: ₹20-₹50 per person (for sanctuary entry)
+
+Opening Hours: 6:00 AM - 5:30 PM
+
+History: The town dates back to the British colonial era, serving as a cantonment. Sanctuary established in 1950.`,
+
+    src: "https://images.unsplash.com/photo-1653305436918-d2fa7f5b6b27?q=80&w=1910&auto=format&fit=crop",
+  },
+  {
+    title: "Jubilee Park",
+    category: "Garden Paradise",
+    bestTimeToVisit: 'November to February',
+    description: `Jubilee Park was built in 1958 by Tata Steel as a gift to the people of Jamshedpur. It reflects the vision of J.R.D. Tata to create a city of gardens.
+
+Highlights:
+- Lush gardens with rose beds and fountains.
+- Laser light shows and illuminations during festivals.
+- Modeled after Mysore's Brindavan Gardens.
+
+Location: Sakchi, Jamshedpur, East Singhbhum district, Jharkhand
+
+Entry Fee: Free
+
+Opening Hours: 6:00 AM - 7:00 PM
+
+History: Established in 1958 by Tata Steel, commemorating J.R.D. Tata's vision of a green city.`,
+
+src: "https://images.unsplash.com/photo-1673960846620-bddc8e985eb1?q=80&w=1170&auto=format&fit=crop",
+  },
+  {
+    title: "Parasnath Hill",
+    category: "Sacred Summit",
+    bestTimeToVisit: 'October to March',
+    description: `Parasnath Hill, also called Shikharji, is the highest peak of Jharkhand and one of the most important Jain pilgrimage centers. It is believed that 20 out of 24 Jain Tirthankaras attained nirvana here.
+
+Highlights:
+- Ancient Jain temples dating back centuries.
+- Trekking trails with panoramic forest views.
+- A holy site revered by Jain pilgrims worldwide.
+
+Location: Giridih district, Jharkhand
+
+Entry Fee: Free
+
+Opening Hours: 5:00 AM - 6:00 PM
+
+History: Parasnath Hill has been a sacred Jain site for thousands of years; believed 20 out of 24 Jain Tirthankaras attained nirvana here.`,
+
+src: "https://images.unsplash.com/photo-1624077881116-7cc1228ce575?q=80&w=1073&auto=format&fit=crop",
+  },
+  {
+    title: "Trikut Parvat",
+    category: "Mythological Marvel",
+    bestTimeToVisit: 'September to March',
+    description: `Trikut Parvat is a mythological site associated with the Ramayana. The hill has three main peaks, considered sacred by Hindus, and also offers ropeway rides.
+
+Highlights:
+- Ropeway ride offering aerial views.
+- Associated with Sage Valmiki's ashram in mythology.
+- Popular with trekkers and pilgrims alike.
+
+Location: Deoghar district, Jharkhand
+
+Entry Fee: Ropeway ₹150-₹300, Temple entry free
+
+Opening Hours: 6:00 AM - 6:00 PM
+
+History: Linked to Ramayana legends; has been a pilgrimage site for centuries.`,
+
+src: "https://images.unsplash.com/photo-1605160738885-5f86a3bb709c?q=80&w=1170&auto=format&fit=crop",
+  },
+  {
+    title: "Ranchi",
+    category: "Capital City",
+    bestTimeToVisit: 'July to February (avoid peak summer)',
+    description: `Ranchi, the capital of Jharkhand, was once the summer capital of Bihar during the British era. Known as the 'City of Waterfalls,' it is surrounded by forests, hills, and rivers.
+
+Highlights:
+- Famous for Dassam, Hundru, and Jonha waterfalls.
+- Tribal culture and handicrafts hub.
+- Once a key tribal and political center.
+
+Location: Ranchi district, Jharkhand
+
+Entry Fee: Free for most natural sites; waterfall entry ₹10-₹50
+
+Opening Hours: 6:00 AM - 6:00 PM
+
+History: Once summer capital of Bihar under British rule; the city developed around its waterfalls and forests.`,
+
+src: "https://plus.unsplash.com/premium_photo-1691031428459-eb63c37acbdd?q=80&w=687&auto=format&fit=crop",
+  },
 ];
+export default PopularCityList;

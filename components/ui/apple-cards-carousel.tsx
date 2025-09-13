@@ -13,8 +13,9 @@ import {
 } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
-import Image, { ImageProps } from "next/image";
+import Image, { ImageProps } from "next/image"; 
 import { useOutsideClick } from "@/app/hooks/use-outside-click";
+import { Button } from "./button";
 
 interface CarouselProps {
   items: JSX.Element[];
@@ -75,18 +76,21 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
     return typeof window !== "undefined" && window.innerWidth < 768;
   }, []);
 
-  const handleCardClose = React.useCallback((index: number) => {
-    if (carouselRef.current) {
-      const cardWidth = isMobile() ? 230 : 384;
-      const gap = isMobile() ? 4 : 8;
-      const scrollPosition = (cardWidth + gap) * (index + 1);
-      carouselRef.current.scrollTo({
-        left: scrollPosition,
-        behavior: "smooth",
-      });
-      setCurrentIndex(index);
-    }
-  }, [isMobile]);
+  const handleCardClose = React.useCallback(
+    (index: number) => {
+      if (carouselRef.current) {
+        const cardWidth = isMobile() ? 230 : 384;
+        const gap = isMobile() ? 4 : 8;
+        const scrollPosition = (cardWidth + gap) * (index + 1);
+        carouselRef.current.scrollTo({
+          left: scrollPosition,
+          behavior: "smooth",
+        });
+        setCurrentIndex(index);
+      }
+    },
+    [isMobile]
+  );
 
   return (
     <CarouselContext.Provider
@@ -100,14 +104,14 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
         >
           <div
             className={cn(
-              "absolute right-0 z-[1000] h-auto w-[5%] overflow-hidden bg-gradient-to-l",
+              "absolute right-0 z-[1000] h-auto w-[5%] overflow-hidden bg-gradient-to-l"
             )}
           ></div>
 
           <div
             className={cn(
               "flex flex-row justify-start gap-4 pl-4",
-              "mx-auto max-w-7xl",
+              "mx-auto max-w-7xl"
             )}
           >
             {items.map((item, index) => (
@@ -155,6 +159,17 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
   );
 };
 
+/* ... other code ... */
+type Card = {
+  src: string;
+  title: string;
+  category: string;
+  content: React.ReactNode;
+  description: string;
+  bestTimeToVisit: string; // New field added
+};
+
+
 export const Card = ({
   card,
   index,
@@ -200,97 +215,116 @@ export const Card = ({
     <>
       <AnimatePresence>
         {open && (
-          <div className="fixed inset-0 z-50 h-screen overflow-auto">
+          <div className="absolute inset-0 z-50 overflow-hidden">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 h-full w-full bg-black/80 backdrop-blur-lg"
+              className="fixed inset-0 h-full w-[110%] bg-black/60 backdrop-blur-lg"
             />
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
               ref={containerRef}
               layoutId={layout ? `card-${card.title}` : undefined}
-              className="relative z-[60] mx-auto my-10 h-fit max-w-5xl rounded-3xl bg-white p-4 font-sans md:p-10 dark:bg-neutral-900"
+              className="relative z-[60] w-full h-full rounded-3xl bg-black/60 p-4 sm:p-6 md:p-8 lg:p-10 font-sans overflow-y-auto"
             >
               <button
-                className="sticky top-4 right-0 ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-black dark:bg-white"
+                className="sticky top-0 sm:top-4 float-right ml-auto flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-white transition-all duration-300 hover:scale-110 z-10 mb-4"
                 onClick={handleClose}
               >
-                <IconX className="h-6 w-6 text-neutral-100 dark:text-neutral-900" />
+                <IconX className="h-4 w-4 sm:h-6 sm:w-6 text-neutral-100 dark:text-neutral-900" />
               </button>
-              <motion.p
-                layoutId={layout ? `category-${card.title}` : undefined}
-                className="text-base font-medium text-black dark:text-white"
-              >
-                {card.category}
-              </motion.p>
-              <motion.p
-                layoutId={layout ? `title-${card.title}` : undefined}
-                className="mt-4 text-2xl font-semibold text-neutral-700 md:text-5xl dark:text-white"
-              >
-                {card.title}
-              </motion.p>
-              <div className="py-10">{card.content}</div>
+              
+              <div className="clear-both h-[70vh] w-[90vw]">
+                {/* Responsive Grid Layout */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 xl:gap-12">
+                  
+                  {/* Left Column - Content */}
+                  <div className="flex flex-col">
+                    <div>
+                      <motion.h1
+                        layoutId={layout ? `title-${card.title}` : undefined}
+                        className="text-xl md:text-2xl lg:text-4xl xl:text-5xl font-bold text-neutral-800 dark:text-white mb-4 leading-tight"
+                      >
+                        {card.title}
+                      </motion.h1>
+                      
+                      {/* Description */}
+                      {card.description && (
+                        <div className="text-xs md:text-xs lg:text-sm xl:text-base leading-relaxed text-neutral-600 dark:text-neutral-400 whitespace-pre-line">
+                          {card.description}
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Best Time to Visit - Bottom of left column */}
+                    {card.bestTimeToVisit && (
+                      <div className="mt-2">
+                        <h3 className="lg:text-lg md:text-sm text-sm font-semibold text-neutral-800 dark:text-white mb-2">
+                          Best Time to Visit
+                        </h3>
+                        <p className="text-xs lg:text-sm md:text-base text-neutral-600 dark:text-neutral-400">
+                          {card.bestTimeToVisit}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Right Column - Image and Button */}
+                  <div className="flex flex-col justify-end space-y-4">
+                    <div className="relative flex-1">
+                      <img 
+                        src={card.src}
+                        alt={card.title}
+                        className="w-96 lg:w-full h-64 md:h-80 lg:h-[500px] xl:h-[28rem] object-cover rounded-lg"
+                      />
+                    </div>
+                    
+                    {/* Button at bottom of right column */}
+                    <div className="flex justify-end">
+                      <button className="w-52 hover:bg-primary flex justify-center text-primary bg-transparent hover:text-white px-2 py-3  md:py-4 rounded-lg text-base md:text-lg border border-primary font-medium transition-all shadow-lg hover:shadow-xl duration-300 transform hover:scale-105">
+                      Create a Trip Here
+                    </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </div>
         )}
       </AnimatePresence>
+      
       <motion.button
         layoutId={layout ? `card-${card.title}` : undefined}
         onClick={handleOpen}
-        className="relative z-10 flex h-80 w-56 flex-col items-start justify-start overflow-hidden rounded-3xl bg-gray-100 md:h-[40rem] md:w-96 dark:bg-neutral-900"
+        className="relative z-10 flex h-80 w-56 flex-col items-start justify-start overflow-hidden rounded-3xl bg-gray-100 md:h-[40rem] md:w-96 dark:bg-neutral-900 group hover:scale-105 transition-transform duration-300"
       >
         <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-full bg-gradient-to-b from-black/50 via-transparent to-transparent" />
-        <div className="relative z-40 p-8">
+        <div className="relative z-40 p-6 sm:p-8">
           <motion.p
             layoutId={layout ? `category-${card.category}` : undefined}
-            className="text-left font-sans text-sm font-medium text-white md:text-base"
+            className="text-left font-sans text-xs sm:text-sm md:text-base font-medium text-white/90 mb-2"
           >
             {card.category}
           </motion.p>
           <motion.p
             layoutId={layout ? `title-${card.title}` : undefined}
-            className="mt-2 max-w-xs text-left font-sans text-xl font-semibold [text-wrap:balance] text-white md:text-3xl"
+            className="max-w-xs text-left font-sans text-lg sm:text-xl md:text-3xl font-bold [text-wrap:balance] text-white leading-tight"
           >
             {card.title}
           </motion.p>
         </div>
-        <BlurImage
+        <Image
           src={card.src}
           alt={card.title}
-          className="absolute inset-0 z-10 object-cover"
+          className="absolute inset-0 h-full w-full object-cover group-hover:scale-110 transition-transform duration-700"
+          width={800}
+          height={600}
+          unoptimized={true}
         />
       </motion.button>
     </>
-  );
-};
-
-// Fix 3: Use Next.js Image component instead of img
-export const BlurImage = ({
-  height,
-  width,
-  src,
-  className,
-  alt,
-  ...rest
-}: ImageProps) => {
-  const [isLoading, setLoading] = useState(true);
-  return (
-    <Image
-      className={cn(
-        "h-full w-full transition duration-300",
-        isLoading ? "blur-sm" : "blur-0",
-        className,
-      )}
-      onLoad={() => setLoading(false)}
-      src={src as string}
-      width={width || 800}
-      height={height || 600}
-      alt={alt ? alt : "Background of a beautiful view"}
-      {...rest}
-    />
   );
 };
