@@ -13,9 +13,11 @@ import {
 } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "motion/react";
-import Image, { ImageProps } from "next/image"; 
+import Image, { ImageProps } from "next/image";
 import { useOutsideClick } from "@/app/hooks/use-outside-click";
 import { Button } from "./button";
+import { PulseLoader } from "react-spinners";
+import { useRouter } from "next/navigation";
 
 interface CarouselProps {
   items: JSX.Element[];
@@ -169,7 +171,6 @@ type Card = {
   bestTimeToVisit: string; // New field added
 };
 
-
 export const Card = ({
   card,
   index,
@@ -211,6 +212,27 @@ export const Card = ({
     setOpen(true);
   };
 
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  function handlePlanVisit(): void {
+    setIsLoading(true);
+    router.push("/create-new-trip");
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-black/40">
+        <PulseLoader color="orange" size={15} />
+        <p className="text-white mt-4">Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <AnimatePresence>
@@ -236,11 +258,10 @@ export const Card = ({
               >
                 <IconX className="h-4 w-4 sm:h-6 sm:w-6 text-neutral-100 dark:text-neutral-900" />
               </button>
-              
+
               <div className="clear-both h-[70vh] w-[90vw]">
                 {/* Responsive Grid Layout */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 xl:gap-12">
-                  
                   {/* Left Column - Content */}
                   <div className="flex flex-col">
                     <div>
@@ -250,7 +271,7 @@ export const Card = ({
                       >
                         {card.title}
                       </motion.h1>
-                      
+
                       {/* Description */}
                       {card.description && (
                         <div className="text-xs md:text-xs lg:text-sm xl:text-base leading-relaxed text-neutral-600 dark:text-neutral-400 whitespace-pre-line">
@@ -258,7 +279,7 @@ export const Card = ({
                         </div>
                       )}
                     </div>
-                    
+
                     {/* Best Time to Visit - Bottom of left column */}
                     {card.bestTimeToVisit && (
                       <div className="mt-2">
@@ -275,18 +296,21 @@ export const Card = ({
                   {/* Right Column - Image and Button */}
                   <div className="flex flex-col justify-end space-y-4">
                     <div className="relative flex-1">
-                      <img 
+                      <img
                         src={card.src}
                         alt={card.title}
                         className="w-96 lg:w-full h-64 md:h-80 lg:h-[500px] xl:h-[28rem] object-cover rounded-lg"
                       />
                     </div>
-                    
+
                     {/* Button at bottom of right column */}
                     <div className="flex justify-end">
-                      <button className="w-52 hover:bg-primary flex justify-center text-primary bg-transparent hover:text-white px-2 py-3  md:py-4 rounded-lg text-base md:text-lg border border-primary font-medium transition-all shadow-lg hover:shadow-xl duration-300 transform hover:scale-105">
-                      Create a Trip Here
-                    </button>
+                      <button
+                        className="w-52 hover:bg-primary flex justify-center text-primary bg-transparent hover:text-white px-2 py-3  md:py-4 rounded-lg text-base md:text-lg border border-primary font-medium transition-all shadow-lg hover:shadow-xl duration-300 transform hover:scale-105"
+                        onClick={handlePlanVisit}
+                      >
+                        Create a Trip Here
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -295,7 +319,7 @@ export const Card = ({
           </div>
         )}
       </AnimatePresence>
-      
+
       <motion.button
         layoutId={layout ? `card-${card.title}` : undefined}
         onClick={handleOpen}
